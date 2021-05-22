@@ -1,0 +1,59 @@
+<div class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">学校名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+          <input type="hidden" name="id" value="{{ d.params.id}}">
+        <input type="text" name="schoolname" value="{{ d.params.schoolname || '' }}" lay-verify="required" placeholder="请输入学校名称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">代码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="code" value="{{ d.params.code || '' }}" lay-verify="required" placeholder="请输学校代码" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">地址</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="addr" value="{{ d.params.addr || '' }}" lay-verify="required" placeholder="请输入地址" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">详情</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+         <textarea name="desc" lay-verify="required" style="width: 400px; height: 150px;" autocomplete="off" class="layui-textarea">
+            {{ d.params.desc || '' }}
+          </textarea>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">审核状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="status" {{ d.params.status ? 'checked' : '' }} lay-skin="switch" lay-text="通过|待审核">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-base-school-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form'], function(){
+  var $ = layui.$
+  ,form = layui.form;
+
+});
+</script>

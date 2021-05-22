@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人脸检测</title>
+    <style>
+        .face{
+            width: 500px;
+            height: 450px;
+            margin-left: 300px;
+            margin-top: 50px;
+        }
+        .layui-upload-img{
+            width: 300px;
+            height: 250px;
+        }
+    </style>
+</head>
+<body>
+<div class="face">
+    <div class="layui-upload">
+      <button type="button" class="layui-btn" id="test1">上传图片</button>
+      <div class="layui-upload-list">
+        <img class="layui-upload-img" id="demo1">
+      </div>
+    </div>
+    <p id="face_info"></p>
+</div>
+
+
+<script>
+layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+
+  //普通图片上传
+  var uploadInst = upload.render({
+    elem: '#test1'
+    ,url: '/upload/face_detect/' //改成您自己的上传接口
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#demo1').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+        let ai =JSON.stringify(res.ai);
+        $('#face_info').text(ai);
+
+        //解析
+          let con = new Array();
+          let r = res.ai;
+          let face_num = r.face_num;
+          con.push("检测到的人脸信息：<br>");
+          con.push("检测到的人脸数：");
+          con.push(face_num);
+          con.push("<br>");
+          let facelist = r.face_list;
+          for(var i=0;i<facelist.length;i++){
+              var age = facelist[i].age;
+              var beauty = facelist[i].beauty;
+              var gender = facelist[i].gender.type;
+              var race = facelist[i].race.type;
+              var expression = facelist[i].expression.type;
+              con.push("======人脸");
+              con.push(i+1);
+              con.push("========<br>");
+              con.push("年龄：");
+              con.push(age);
+              con.push("<br>");
+              con.push("魅力值：");
+              con.push(beauty);
+              con.push("<br>");
+              con.push("性别：");
+              con.push(gender);
+              con.push("<br>");
+              con.push("皮肤：");
+              con.push(race);
+              con.push("<br>");
+              con.push("表情：");
+              con.push(expression);
+              con.push("<br>");
+
+          }
+
+        //小tips
+        layer.tips(con.join(""), '#demo1', {
+          tips: [2, '#3595CC'],
+          time: 0
+        });
+
+    }
+    ,error: function(){
+
+    }
+  });
+  });
+</script>
+</body>
+</html>

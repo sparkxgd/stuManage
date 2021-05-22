@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>学生管理系统</title>
+        <style>
+            body{
+                background-color: lightseagreen;
+            }
+			#div2{
+				width: 500px;
+				height: 300px;
+				border: 4px solid black;
+				background-image: linear-gradient(to bottom right, red , yellow);
+				font-size: 30px;
+				color: white;
+				font-family:"宋体";
+                margin-left: 30%;
+                margin-top: 100px;
+                border-radius: 30px;
+                box-shadow:30px 20px 10px black;
+			}
+            .div3{
+                height: 70px;
+            }
+            .div3_1{
+                text-shadow: 15px 10px 5px black;
+                text-align: center;
+            }
+            .div3_2{
+                margin-left: 110px;
+            }
+            input{
+                height: 30px;
+                border-radius: 8px;
+            }
+            .input1{
+                margin-left: 90px;
+                width: 170px;
+                height: 40px;
+                font-size: 20px;
+                background-color: dodgerblue;
+
+            }
+		</style>
+        <script src="../static/jquery-3.4.1.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $(".input1").click(function(){
+                    //点击登录按钮 要做的事情
+                    var username =$("#username").val();
+                    var password =$("#password").val();
+                    $.ajax({
+                        type:"post",
+                        url:"/login/",
+                        data:{"username":username,"password":password},
+                        dataType:"json",
+                        success:function (r) {
+                            if(r.result.code==1){
+                                //密码正确
+                                window.location.href="/index/";
+                            }else{
+                                 alert(r.result.msg);
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+    </head>
+	<body>
+		<div id="div2">
+            <div class="div3 div3_1">我的python工程系统登录</div>
+            <div class="div3 div3_2">账号：<input id="username" type="text"></div>
+            <div class="div3 div3_2">密码：<input id="password" type="password"></div>
+            <div class="div3 div3_2"><input class="input1" type="button" value="登录"></div>
+		</div>
+	</body>
+</html>

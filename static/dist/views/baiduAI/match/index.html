@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人脸比对</title>
+    <style>
+        .face{
+            width: 900px;
+            height: 450px;
+
+            margin-left: 200px;
+            margin-top: 50px;
+        }
+        .layui-upload-img{
+            width: 300px;
+            height: 250px;
+        }
+    </style>
+</head>
+<body>
+<div class="face">
+  <div class="layui-row">
+    <div class="layui-col-xs6">
+      <div class="grid-demo grid-demo-bg1">
+          <div class="layui-upload">
+              <button type="button" class="layui-btn" id="test1">上传图片</button>
+              <div class="layui-upload-list">
+                <img class="layui-upload-img" id="demo1">
+              </div>
+           </div>
+      </div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="grid-demo">
+          <div class="layui-upload">
+              <button type="button" class="layui-btn" id="test2">上传图片</button>
+              <div class="layui-upload-list">
+                <img class="layui-upload-img" id="demo2">
+              </div>
+            </div>
+      </div>
+    </div>
+  </div>
+    <button type="button" class="layui-btn" data-type="match">开始比对</button>
+    <p id="macthinf"></p>
+</div>
+
+
+<script>
+layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+
+  //普通图片上传
+  var uploadInst = upload.render({
+    elem: '#test1'
+    ,url: '/upload/upload_face_detect/' //改成您自己的上传接口
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#demo1').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+        layer.msg(res.result.msg);
+    }
+  });
+
+  //普通图片上传
+  var uploadInst2 = upload.render({
+    elem: '#test2'
+    ,url: '/upload/upload_face_detect/' //改成您自己的上传接口
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#demo2').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+        layer.msg(res.result.msg);
+    }
+  });
+
+  //事件
+  var active = {
+        match:function () {
+            var img1 = $('#demo1').attr("src");
+            var img2 = $('#demo2').attr("src");
+            //开始图片比对
+            $.ajax({
+                type:"POST",
+                url:"/upload/face_match/",
+                dataType:"json",
+                data:{"img1":img1,"img2":img2},
+                success:function (r) {
+                    let ai =JSON.stringify(r.ai);
+                    $("#macthinf").text(ai);
+                    let con = new Array();
+                    let score = r.ai.score;
+                    con.push("比对信息<br>");
+                    con.push("相似度：");
+                    con.push(score);
+                    //小tips
+                    layer.tips(con.join(""), '#demo1', {
+                      tips: [2, '#3595CC'],
+                      time: 0
+                    });
+                }
+            });
+        }
+  };
+
+    $('.layui-btn').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+
+  });
+</script>
+</body>
+</html>
